@@ -28,7 +28,7 @@ fun SudokuScreen(onExit: () -> Unit) {
     val ColorHighlight = Color(0xFFFFD700)
     val ColorCursorInit = Color(0xFFFFD700)
     val ColorError = Color(0xFFFFCE9E)
-    val ColorHint = Color(0xFFFFCE9E) // Usamos el mismo color que los errores
+    val ColorHint = Color(0xFFFFCE9E)
     val ColorDiagonal = Color(0xFFA0D8EF)
     val ColorButton = Color(0xFFDDDDDD)
     val ColorWhite = Color.White
@@ -138,67 +138,81 @@ fun SudokuScreen(onExit: () -> Unit) {
         }
 
         Spacer(Modifier.height(8.dp))
-        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                numberLabels.chunked(3).forEach { row ->
-                    Row(horizontalArrangement = Arrangement.Center) {
-                        row.forEach { label ->
-                            TextButton(
-                                onClick = {
-                                    val (r, c) = cursorPos
-                                    val idx = r * 9 + c
-                                    if (initialGrid[idx] == 0) {
-                                        userGrid = userGrid.toMutableList().also {
-                                            it[idx] = label.toInt()
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    numberLabels.chunked(3).forEach { row ->
+                        Row(horizontalArrangement = Arrangement.Center) {
+                            row.forEach { label ->
+                                TextButton(
+                                    onClick = {
+                                        val (r, c) = cursorPos
+                                        val idx = r * 9 + c
+                                        if (initialGrid[idx] == 0) {
+                                            userGrid = userGrid.toMutableList().also {
+                                                it[idx] = label.toInt()
+                                            }
+                                            evaluate()
                                         }
-                                        evaluate()
-                                    }
-                                },
-                                modifier = Modifier.padding(2.dp).size(36.dp),
-                                colors = ButtonDefaults.textButtonColors(containerColor = ColorButton)
-                            ) {
-                                Text(text = label, fontSize = 14.sp, color = ColorBlack)
+                                    },
+                                    modifier = Modifier.padding(2.dp).size(36.dp),
+                                    colors = ButtonDefaults.textButtonColors(containerColor = ColorButton)
+                                ) {
+                                    Text(text = label, fontSize = 14.sp, color = ColorBlack)
+                                }
                             }
                         }
                     }
                 }
-            }
 
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                TextButton(
-                    onClick = { cursorPos = ((cursorPos.first - 1).mod(9)) to cursorPos.second },
-                    modifier = Modifier.size(36.dp),
-                    colors = ButtonDefaults.textButtonColors(containerColor = ColorButton)
-                ) { Text("↑", style = arrowTextStyle) }
-                Row {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     TextButton(
-                        onClick = { cursorPos = cursorPos.first to ((cursorPos.second - 1).mod(9)) },
+                        onClick = { cursorPos = ((cursorPos.first - 1).mod(9)) to cursorPos.second },
                         modifier = Modifier.size(36.dp),
                         colors = ButtonDefaults.textButtonColors(containerColor = ColorButton)
-                    ) { Text("←", style = arrowTextStyle) }
+                    ) { Text("↑", style = arrowTextStyle) }
+                    Row {
+                        TextButton(
+                            onClick = { cursorPos = cursorPos.first to ((cursorPos.second - 1).mod(9)) },
+                            modifier = Modifier.size(36.dp),
+                            colors = ButtonDefaults.textButtonColors(containerColor = ColorButton)
+                        ) { Text("←", style = arrowTextStyle) }
+                        TextButton(
+                            onClick = {
+                                val (r, c) = cursorPos
+                                val idx = r * 9 + c
+                                userGrid = userGrid.toMutableList().also {
+                                    it[idx] = 0
+                                }
+                                hintFlags = hintFlags.mapIndexed { rowIdx, row ->
+                                    row.mapIndexed { colIdx, flag ->
+                                        if (rowIdx == r && colIdx == c) false else flag
+                                    }.toBooleanArray()
+                                }.toTypedArray()
+                                evaluate()
+                            },
+                            modifier = Modifier.size(36.dp),
+                            colors = ButtonDefaults.textButtonColors(containerColor = ColorButton)
+                        ) { Text("C", style = arrowTextStyle) }
+                        TextButton(
+                            onClick = { cursorPos = cursorPos.first to ((cursorPos.second + 1).mod(9)) },
+                            modifier = Modifier.size(36.dp),
+                            colors = ButtonDefaults.textButtonColors(containerColor = ColorButton)
+                        ) { Text("→", style = arrowTextStyle) }
+                    }
                     TextButton(
-                        onClick = {
-                            val (r, c) = cursorPos
-                            val idx = r * 9 + c
-                            userGrid = userGrid.toMutableList().also {
-                                it[idx] = 0
-                            }
-                            evaluate()
-                        },
+                        onClick = { cursorPos = ((cursorPos.first + 1).mod(9)) to cursorPos.second },
                         modifier = Modifier.size(36.dp),
                         colors = ButtonDefaults.textButtonColors(containerColor = ColorButton)
-                    ) { Text("C", style = arrowTextStyle) }
-                    TextButton(
-                        onClick = { cursorPos = cursorPos.first to ((cursorPos.second + 1).mod(9)) },
-                        modifier = Modifier.size(36.dp),
-                        colors = ButtonDefaults.textButtonColors(containerColor = ColorButton)
-                    ) { Text("→", style = arrowTextStyle) }
+                    ) { Text("↓", style = arrowTextStyle) }
                 }
-                TextButton(
-                    onClick = { cursorPos = ((cursorPos.first + 1).mod(9)) to cursorPos.second },
-                    modifier = Modifier.size(36.dp),
-                    colors = ButtonDefaults.textButtonColors(containerColor = ColorButton)
-                ) { Text("↓", style = arrowTextStyle) }
             }
         }
 
@@ -224,3 +238,4 @@ fun SudokuScreen(onExit: () -> Unit) {
         }
     }
 }
+
