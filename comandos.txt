@@ -1,0 +1,9 @@
+cd "C:\Users\oscar\Android\platform-tools"
+.\adb.exe install -r "C:\Users\oscar\Desktop\worksp\sudoku_Kotlin\build\outputs\apk\debug\sudoku-debug.apk"
+.\adb shell monkey -p com.example.sudoku -c android.intent.category.LAUNCHER 1
+./gradlew assembleDebug
+adb devices
+avdmanager list avd
+avdmanager create avd -n pixel_api_33 -k "system-images;android-33;google_apis;x86_64"
+sdkmanager "system-images;android-33;google_apis;x86_64"
+C:\Users\oscar\Android\cmdline-tools\latest\bin

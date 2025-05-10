@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Nombre de la aplicación -->
+    <string name="app_name">Sudoku</string>
+
+    <!-- Menú de dificultad -->
+    <string name="difficulty">Dificultad: %1$s</string>
+    <string name="easy">Fácil</string>
+    <string name="medium">Medio</string>
+    <string name="hard">Difícil</string>
+    <string name="expert">Experto</string>
+    <string name="infernal">Infernal</string>
+
+    <!-- Botones numéricos -->
+    <string name="button_1">1</string>
+    <string name="button_2">2</string>
+    <string name="button_3">3</string>
+    <string name="button_4">4</string>
+    <string name="button_5">5</string>
+    <string name="button_6">6</string>
+    <string name="button_7">7</string>
+    <string name="button_8">8</string>
+    <string name="button_9">9</string>
+
+    <!-- Movimiento del cursor -->
+    <string name="up_arrow">↑</string>
+    <string name="down_arrow">↓</string>
+    <string name="left_arrow">←</string>
+    <string name="right_arrow">→</string>
+
+    <!-- Acciones -->
+    <string name="hint">Pista</string>
+    <string name="new_game">Nuevo</string>
+</resources>
