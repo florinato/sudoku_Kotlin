@@ -1,3 +1,7 @@
+## Captura de Pantalla
+
+![Captura de Pantalla](Captura.png)
+
 # Sudoku - Características del Juego
 
 Este es un juego de Sudoku funcional con las siguientes características:
@@ -18,6 +22,5 @@ El juego ofrece pistas para ayudar a los jugadores a resolver el rompecabezas.
 
 El juego incluye diferentes niveles de dificultad para adaptarse a jugadores de todos los niveles de habilidad.
 
-## Captura de Pantalla
 
-[Enlace a la captura de pantalla](Captura.png)
+
