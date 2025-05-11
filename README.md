@@ -22,5 +22,21 @@ El juego ofrece pistas para ayudar a los jugadores a resolver el rompecabezas.
 
 El juego incluye diferentes niveles de dificultad para adaptarse a jugadores de todos los niveles de habilidad.
 
+## Generación del APK para Android
 
+Para generar el archivo APK para Android, sigue estos pasos:
 
+### Dependencias
+
+*   Android Studio (con SDK de Android instalado)
+*   Java Development Kit (JDK)
+
+### Procedimiento
+
+1.  **Abre el proyecto en Android Studio:** Importa el proyecto en Android Studio.
+2.  **Construye el APK:** Ve a "Build" -> "Build Bundle(s) / APK(s)" -> "Build APK(s)".
+3.  **Localiza el APK:** El APK generado se encontrará en el directorio `app/build/outputs/apk/debug/` o `app/build/outputs/apk/release/`, dependiendo de la configuración de compilación.
+
+### Instalación
+
+Una vez que tengas el archivo APK, puedes instalarlo en tu dispositivo Android o emulador.
