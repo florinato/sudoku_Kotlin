@@ -3,6 +3,7 @@
 
 package com.example.sudoku.ui
 
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -11,9 +12,14 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.sudoku.core.PuzzleGenerator
@@ -107,37 +113,70 @@ fun SudokuScreen(onExit: () -> Unit) {
         }
 
         Spacer(Modifier.height(8.dp))
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            for (r in 0 until 9) {
-                Row {
-                    for (c in 0 until 9) {
-                        val idx = r * 9 + c
-                        val isInit = initialGrid[idx] != 0
-                        val value = if (userGrid[idx] == 0) "" else userGrid[idx].toString()
-                        val bg = when {
-                            cursorPos == r to c -> ColorCursorInit
-                            errorCells.contains(r to c) -> ColorError
-                            hintFlags[r][c] -> ColorHint
-                            r == c || r + c == 8 -> ColorDiagonal
-                            else -> ColorWhite
+
+        var gridSize by remember { mutableStateOf(IntSize.Zero) }
+
+        Box(modifier = Modifier
+            .onGloballyPositioned { coordinates ->
+                gridSize = coordinates.size
+            }) {
+
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                for (r in 0 until 9) {
+                    Row {
+                        for (c in 0 until 9) {
+                            val idx = r * 9 + c
+                            val isInit = initialGrid[idx] != 0
+                            val value = if (userGrid[idx] == 0) "" else userGrid[idx].toString()
+                            val bg = when {
+                                cursorPos == r to c -> ColorCursorInit
+                                errorCells.contains(r to c) -> ColorError
+                                hintFlags[r][c] -> ColorHint
+                                r == c || r + c == 8 -> ColorDiagonal
+                                else -> ColorWhite
+                            }
+                            val textColor = if (isInit) ColorInitial else ColorDefault
+                            Box(
+                                contentAlignment = Alignment.Center,
+                                modifier = Modifier
+                                    .size(32.dp)
+                                    .border(1.dp, ColorBlack)
+                                    .background(bg)
+                                    .clickable { cursorPos = r to c }
+                            ) {
+                                Text(text = value, color = textColor, fontSize = 16.sp)
+                            }
                         }
-                        val textColor = if (isInit) ColorInitial else ColorDefault
-                        Box(
-                            contentAlignment = Alignment.Center,
-                            modifier = Modifier
-                                .size(32.dp)
-                                .border(1.dp, ColorBlack)
-                                .background(bg)
-                                .clickable { cursorPos = r to c }
-                        ) {
-                            Text(text = value, color = textColor, fontSize = 16.sp)
-                        }
+                    }
+                }
+            }
+
+            Canvas(modifier = Modifier.matchParentSize()) {
+                val cellWidth = size.width / 9f
+                val cellHeight = size.height / 9f
+                val strokeWidth = 3.dp.toPx()
+
+                for (i in 1 until 9) {
+                    if (i % 3 == 0) {
+                        drawLine(
+                            color = Color.Black,
+                            start = Offset(0f, i * cellHeight),
+                            end = Offset(size.width, i * cellHeight),
+                            strokeWidth = strokeWidth
+                        )
+                        drawLine(
+                            color = Color.Black,
+                            start = Offset(i * cellWidth, 0f),
+                            end = Offset(i * cellWidth, size.height),
+                            strokeWidth = strokeWidth
+                        )
                     }
                 }
             }
         }
 
         Spacer(Modifier.height(8.dp))
+
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center,
@@ -217,6 +256,7 @@ fun SudokuScreen(onExit: () -> Unit) {
         }
 
         Spacer(Modifier.height(8.dp))
+
         TextButton(onClick = {
             hintFlags = Array(9) { r -> BooleanArray(9) { c ->
                 val idx = r * 9 + c
@@ -227,6 +267,7 @@ fun SudokuScreen(onExit: () -> Unit) {
         }
 
         Spacer(Modifier.height(4.dp))
+
         TextButton(onClick = {
             puzzle = PuzzleGenerator.generateRandom(context, difficultyLevels[currentDifficulty]!!)
             initialGrid.indices.forEach { initialGrid[it] = puzzle.puzzle[it] }
