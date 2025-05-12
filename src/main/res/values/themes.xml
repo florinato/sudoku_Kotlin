@@ -9,5 +9,6 @@
         <!-- Status bar color. -->
         <!-- <item name="statusBarColor">@color/purple_700</item> -->
         <!-- Customize your theme here. -->
+        <item name="android:textColor">@color/default_color</item>
     </style>
 </resources>
