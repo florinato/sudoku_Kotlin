@@ -1,16 +1,16 @@
 plugins {
-    id("com.android.application") version "8.3.0"
-    kotlin("android") version "1.9.22"
+    id("com.android.application") version "8.4.0"
+    kotlin("android") version "1.9.23"
 }
 
 android {
     namespace = "com.example.sudoku"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.sudoku"
         minSdk = 21
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 

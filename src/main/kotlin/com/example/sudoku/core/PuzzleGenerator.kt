@@ -14,7 +14,7 @@ object PuzzleGenerator {
         require(template.length == 81) { "Template must be 81 characters long" }
 
         val chars = template.toSet().toList()
-        val digits = (1..9).shuffled().take(chars.size).sorted()
+        val digits = (1..9).shuffled().take(chars.size)
         val map = chars.zip(digits).toMap()
 
         val solution = IntArray(81) { i ->
